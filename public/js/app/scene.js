@@ -22,4 +22,9 @@ class Scene {
     this.camera.position.z = 5
   }
 
+  setLayer (id) {
+    console.log(`Enable to layer ${id}`)
+    this.camera.layers.enable(id)
+    this.light.layers.enable(id)
+  }
 }

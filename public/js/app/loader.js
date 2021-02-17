@@ -6,17 +6,22 @@ class Loader {
     this.mtlLoader.setPath('/models/')
   }
 
-  load (nomeObj, nameMat, callback) {
+  load (nameObj, nameMat, callback) {
     new Promise((resolve) => {
       this.mtlLoader.load(nameMat, (materials) => {
         resolve(materials)
       })
     }).then((materials) => {
       materials.preload()
-      this.objLoader.setMaterials(materials)
-      this.objLoader.load(nomeObj, (object) => {
-        callback(object, materials)
-      })
+      this.loadObj(nameObj, materials, callback)
     })
   }
+
+  loadObj (nameObj, materials, callback) {
+    this.objLoader.setMaterials(materials)
+    this.objLoader.load(nameObj, (object) => {
+      callback(object)
+    })
+  }
+
 }

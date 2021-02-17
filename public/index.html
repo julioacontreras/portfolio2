@@ -4,29 +4,59 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="/js/utils/resize.js"></script>
+
   <script src="/js/threejs/three.min.js"></script>
   <script src="/js/threejs/loaders/OBJLoader.js"></script>
   <script src="/js/threejs/loaders/MTLLoader.js"></script>
-  <script src="/js/threejs/shaders/AsciiEffect.js"></script>
-  <script src="/js/threejs/shaders/EffectComposer.js"></script>
-  <script src="/js/threejs/shaders/RenderPass.js"></script>
-  <script src="/js/threejs/shaders/ShaderPass.js"></script>
-  <script src="/js/threejs/shaders/CopyShader.js"></script>
-  <script src="/js/threejs/shaders/DotScreenShader.js"></script>
-  <script src="/js/threejs/shaders/RGBShiftShader.js"></script>
-  <script src="/js/threejs/shaders/BadTVShader.js"></script>
-  <script src="/js/utils/resize.js"></script>
+  <script src="/js/threejs/plugins/AsciiEffect.js"></script>
+  <script src="/js/threejs/plugins/EffectComposer.js"></script>
+  <script src="/js/threejs/plugins/RenderPass.js"></script>
+  <script src="/js/threejs/plugins/ShaderPass.js"></script>
+  <script src="/js/threejs/plugins/CopyShader.js"></script>
+  <script src="/js/threejs/plugins/DotScreenShader.js"></script>
+  <script src="/js/threejs/plugins/RGBShiftShader.js"></script>
+  <script src="/js/threejs/plugins/BadTVShader.js"></script>
+  <script src="/js/threejs/plugins/ExtendMaterial.js"></script>
 
+  <script src="/js/app/fxHighTech.js"></script>
   <script src="/js/app/loader.js"></script>
-  <script src="/js/app/mainObject.js"></script>
   <script src="/js/app/render.js"></script>
   <script src="/js/app/scene.js"></script>
   <script src="/js/app/main.js"></script>
 
-  <link href="stylesheet" href="/css/index.css">
+  <script src="/js/app/mainObject.js"></script>
+  <script src="/js/app/testObject.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+    }    
+  </style>
   <title>JC Portfolio</title>
 </head>
 <body onload="main()">
+  <script type="x-shader/x-vertex" id="vertexshader">
+    varying vec2 vUv;
+
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
+  </script>
+
+  <script type="x-shader/x-fragment" id="fragmentshader">
+    uniform sampler2D baseTexture;
+    uniform sampler2D fxTexture;
+
+    varying vec2 vUv;
+
+    void main() {
+      gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( fxTexture, vUv ) );
+    }
+  </script>
+ 
 </body>
 </html>
   

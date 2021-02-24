@@ -5,58 +5,348 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <script src="/js/utils/typed.js"></script>
   <script src="/js/utils/resize.js"></script>
+  <script src="/js/utils/force.js"></script>
+  <script src="/js/utils/stats.min.js"></script>
 
   <script src="/js/threejs/three.min.js"></script>
-  <script src="/js/threejs/loaders/OBJLoader.js"></script>
-  <script src="/js/threejs/loaders/MTLLoader.js"></script>
-  <script src="/js/threejs/plugins/AsciiEffect.js"></script>
+ 
   <script src="/js/threejs/plugins/EffectComposer.js"></script>
   <script src="/js/threejs/plugins/RenderPass.js"></script>
   <script src="/js/threejs/plugins/ShaderPass.js"></script>
+  <script src="/js/threejs/plugins/ConvolutionShader.js"></script>
+  <script src="/js/threejs/plugins/StaticShader.js"></script>
+  <script src="/js/threejs/plugins/FilmShader.js"></script>
   <script src="/js/threejs/plugins/CopyShader.js"></script>
-  <script src="/js/threejs/plugins/DotScreenShader.js"></script>
-  <script src="/js/threejs/plugins/RGBShiftShader.js"></script>
-  <script src="/js/threejs/plugins/BadTVShader.js"></script>
-  <script src="/js/threejs/plugins/ExtendMaterial.js"></script>
+  <script src="/js/threejs/plugins/three-spritetext.js"></script>
+  <script src="/js/threejs/plugins/GlitchPass.js"></script>
+  <script src="/js/threejs/plugins/DigitalGlitch.js"></script>
+  <script src="/js/threejs/plugins/BloomPass.js"></script>
+  <script src="/js/threejs/plugins/FilmPass.js"></script>
 
-  <script src="/js/app/fxHighTech.js"></script>
-  <script src="/js/app/loader.js"></script>
-  <script src="/js/app/render.js"></script>
+  <script src="/js/app/renders/effects.js"></script>
+  <script src="/js/app/renders/render.js"></script>
   <script src="/js/app/scene.js"></script>
   <script src="/js/app/main.js"></script>
+  <script src="/js/app/objects/monument.js"></script>
 
-  <script src="/js/app/mainObject.js"></script>
-  <script src="/js/app/testObject.js"></script>
+  <script src="/js/web/index.js"></script>
 
   <style>
     body {
+      overflow: hidden;
       margin: 0;
-    }    
+      font-family: "minimal";
+    } 
+
+    .w-full {
+      width: 100%;
+    }
+
+    .font {
+      font-family: "minimal";
+    }
+
+    .text-primary {
+      color: #1e0952
+    }
+
+    .text-secondary {
+      color: #ffffff
+    }
+
+    .bg-secondary {
+      background-color: #ffffff
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .pt-1\/2 {
+      padding-top: 350px;
+    }   
+
+    .pt-1\/4 {
+      padding-top: 200px;
+    }   
+
+    .pl-3 {
+      padding-left: 0.5rem;
+    } 
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .justify-start	{ justify-content: flex-start; }
+    .justify-end	{ justify-content: flex-end; }
+    .justify-center	{ justify-content: center; }
+
+    .text-base {
+      font-size: 1rem;
+    }
+
+    .text-lg {
+      font-size: 2rem;
+    }
+
+    .text-2lg {
+      font-size: 4rem;
+    }
+
+    a {
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @font-face {
+      font-family: "minimal";
+      src: url("/fonts/IBMPlexMono-Regular.ttf")
+    } 
+    #canvas3D {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #canvas2D {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+    }
+
+    .grid {
+      display: grid;
+    }
+    .w-6	{ width: 2rem; }
+
+    .items-end	{ align-items: flex-end; }
+    .items-center	{ align-items: center; }
+
+    .grid-r3 {
+      grid-template-rows: 60px 1fr 60px;
+      height: 100vh;
+    }
+
+    .blurry-text {
+      text-shadow: 0 0 6px white;
+      color: transparent;
+    }
+
+    @-webkit-keyframes blur-fadeout {
+      0% {
+        text-shadow: 0 0 0px white;
+        color: white;
+      }
+
+      30% {
+        text-shadow: 0 0 6px white;
+        color: transparent;
+      }
+
+      100% {
+        text-shadow: 0 0 6px white;
+        color: transparent;
+      }
+    }
+
+    @-webkit-keyframes blur-fadein {
+      0% {
+        text-shadow: 0 0 16px white;
+        color: transparent;
+      }
+
+      100% {
+        text-shadow: 0 0 0px white;
+        color: white;
+      }
+
+    }
+
+    .title-page {
+      animation-name: blur-fadein;
+      animation-duration: 3s;       
+    }
+
+    .link:hover {
+      animation-name: blur-fadeout;
+      animation-duration: 10s;      
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .text-center	{ text-align: center; }
+
+    @media only screen and (max-width: 600px) {
+      .xs\:text-base {
+        font-size: 1rem;
+      }
+
+      .xs\:text-lg {
+        font-size: 2rem;
+      }
+
+      .xs\:bg-secondary {
+        background-color: #ffffff
+      }      
+    }
+
   </style>
   <title>JC Portfolio</title>
 </head>
-<body onload="main()">
-  <script type="x-shader/x-vertex" id="vertexshader">
-    varying vec2 vUv;
+<body onload="main(THREE)">
+  <div id="canvas3D"></div>
+  <div id="canvas2D" class="text-primary">
+    <!-- ABOUT -->
+    <div id="about" class="grid grid-r3 hidden">
+      <div id="about-title" class="w-full title text-secondary font text-2lg flex justify-center">
+        ABOUT
+      </div>
+      <div class="w-full flex flex-col ">
+        <div class="pt-1/4 flex flex-col justify-center text-lg">
+          <p class="w-full text-center"> CONTENT CONTENT CONTENT CONTENT </p>
+          <p class="w-full text-center"> CONTENT CONTENT CONTENT CONTENT </p>
+          <p class="w-full text-center"> CONTENT CONTENT CONTENT CONTENT </p>
+          <p class="w-full text-center"> CONTENT CONTENT CONTENT CONTENT </p>
+        </div>
+      </div>
+      <div class="flex w-full justify-center text-secondary items-center">
+        <a href="javascript:web.showHome()" class="pl-3 font text-secondary link">
+          BACK 
+        </a>
+      </div>
+    </div>
 
-    void main() {
-      vUv = uv;
+
+    <!-- HOME -->
+    <div id="home" class="grid grid-r3">
+      <div class="w-full"></div>
+      <div class="w-full flex flex-col pt-1/2">
+        <div class="w-full title font text-2lg xs:text-lg flex justify-center">
+          JULIO CONTRERAS
+        </div>
+        <div class="w-full subtitle font text-primary xs:bg-secondary text-lg xs:text-base flex justify-center">
+          FULL CIRCLE DEVELOPER
+        </div>
+      </div>
+      <div class="flex w-full justify-center text-secondary items-center">
+        <a href="javascript:web.showAbout()" class="pl-3 font text-secondary link">
+          ABOUT 
+        </a>
+        <div class="w-6 justify-center flex"> | </div>
+        <a href="" class="pl-3 font text-secondary link">
+          EXPERIENCE
+        </a>
+        <div class="w-6 justify-center flex"> | </div>
+        <a href="" class="pl-3 font text-secondary link">
+          CONTACT
+        </a>
+      </div>
+    </div>
+  </div>
+<script id="fragmentShader" type="x-shader/x-fragment">
+
+			uniform float time;
+
+			uniform float fogDensity;
+			uniform vec3 fogColor;
+
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;
+
+			varying vec2 vUv;
+
+			void main( void ) {
+
+				vec2 position = - 1.0 + 2.0 * vUv;
+
+				vec4 noise = texture2D( texture1, vUv );
+				vec2 T1 = vUv + vec2( 1.5, - 1.5 ) * time * 0.02;
+				vec2 T2 = vUv + vec2( - 0.5, 2.0 ) * time * 0.01;
+
+				T1.x += noise.x * 2.0;
+				T1.y += noise.y * 2.0;
+				T2.x -= noise.y * 0.2;
+				T2.y += noise.z * 0.2;
+
+				float p = texture2D( texture1, T1 * 2.0 ).a;
+
+				vec4 color = texture2D( texture2, T2 * 2.0 );
+				vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
+
+				if( temp.r > 1.0 ) { temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+				if( temp.g > 1.0 ) { temp.rb += temp.g - 1.0; }
+				if( temp.b > 1.0 ) { temp.rg += temp.b - 1.0; }
+
+				gl_FragColor = temp;
+
+				float depth = gl_FragCoord.z / gl_FragCoord.w;
+				const float LOG2 = 1.442695;
+				float fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );
+				fogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );
+
+				gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+
+			}
+
+		</script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+
+			uniform vec2 uvScale;
+			varying vec2 vUv;
+
+			void main()
+			{
+
+				vUv = uvScale * uv;
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+				gl_Position = projectionMatrix * mvPosition;
+
+			}
+
+		</script>
+
+
+<!-- ---------------- Custom Shader Code ------------------------ -->
+<script id="vertexShaderGlow" type="x-shader/x-vertex">
+  uniform vec3 viewVector;
+  uniform float c;
+  uniform float p;
+  varying float intensity;
+  void main() 
+  {
+      vec3 vNormal = normalize( normalMatrix * normal );
+    vec3 vNormel = normalize( normalMatrix * viewVector );
+    intensity = pow( c - dot(vNormal, vNormel), p );
+    
       gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-    }
+  }
   </script>
-
-  <script type="x-shader/x-fragment" id="fragmentshader">
-    uniform sampler2D baseTexture;
-    uniform sampler2D fxTexture;
-
-    varying vec2 vUv;
-
-    void main() {
-      gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( fxTexture, vUv ) );
-    }
+  
+  <!-- fragment shader a.k.a. pixel shader -->
+  <script id="fragmentShaderGlow" type="x-shader/x-vertex"> 
+  uniform vec3 glowColor;
+  varying float intensity;
+  void main() 
+  {
+    vec3 glow = glowColor * intensity;
+      gl_FragColor = vec4( glow, 1.0 );
+  }
   </script>
- 
 </body>
 </html>
   

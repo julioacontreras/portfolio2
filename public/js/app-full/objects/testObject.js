@@ -10,9 +10,9 @@ class TestObject {
     return this.existObject
   }
 
-  update () {
+  update (delta) {
     if (this.exist()) {
-      this.obj.rotation.z += 0.01
+      this.obj.rotation.z = Math.sin(delta) * 10
     }
   }
 }

@@ -2,9 +2,8 @@ class Render {
   constructor (THREE) {
     this.THREE = THREE
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
-    this.renderer.setClearColor(0x1707ff)
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
-    document.body.appendChild(this.renderer.domElement)
+    this.renderer.setPixelRatio(window.devicePixelRatio)
+    document.getElementById('canvas3D').appendChild(this.renderer.domElement)
   }
 
   render () {

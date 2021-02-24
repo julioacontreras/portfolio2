@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="/js/utils/typed.js"></script>
+  <script src="/js/utils/resize.js"></script>
+  <script src="/js/utils/force.js"></script>
+
+  <script src="/js/threejs/three.min.js"></script>
+  <script src="/js/threejs/loaders/OBJLoader.js"></script>
+  <script src="/js/threejs/loaders/MTLLoader.js"></script>
+ 
+  <script src="/js/threejs/plugins/AsciiEffect.js"></script>
+  <script src="/js/threejs/plugins/EffectComposer.js"></script>
+  <script src="/js/threejs/plugins/RenderPass.js"></script>
+  <script src="/js/threejs/plugins/ShaderPass.js"></script>
+  <script src="/js/threejs/plugins/StaticShader.js"></script>
+  <script src="/js/threejs/plugins/FilmShader.js"></script>
+  <script src="/js/threejs/plugins/CopyShader.js"></script>
+  <script src="/js/threejs/plugins/DotScreenShader.js"></script>
+  <script src="/js/threejs/plugins/RGBShiftShader.js"></script>
+  <script src="/js/threejs/plugins/BadTVShader.js"></script>
+  <script src="/js/threejs/plugins/ExtendMaterial.js"></script>
+  <script src="/js/threejs/plugins/three-spritetext.js"></script>
+  <script src="/js/threejs/plugins/GlitchPass.js"></script>
+  <script src="/js/threejs/plugins/DigitalGlitch.js"></script>
+  
+  <script src="/js/app/fx/highTech.js"></script>
+  <script src="/js/app/materials/reflectionCube.js"></script>
+  <script src="/js/app/loader.js"></script>
+  <script src="/js/app/render.js"></script>
+  <script src="/js/app/scene.js"></script>
+  <script src="/js/app/main.js"></script>
+
+  <script src="/js/app/objects/background.js"></script>
+  <script src="/js/app/objects/jc.js"></script>
+  <script src="/js/app/objects/testObject.js"></script>
+  <script src="/js/app/objects/title.js"></script>
+
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+    } 
+
+    .font {
+      font-family: "minimal";
+      opacity: 0;
+      position: absolute;
+      width: 0px;
+    }
+
+    @font-face {
+      font-family: "minimal";
+      src: url("/fonts/MinimalFont5x7.ttf")
+    }
+  </style>
+  <title>JC Portfolio</title>
+</head>
+<body onload="main(THREE)">
+  <p class="font">font</p>
+
+  <script id="vertexShader" type="x-shader/x-vertex">
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix 
+        * modelViewMatrix 
+        * vec4( position, 1.0 );
+    }
+  </script>
+  
+  <script id="fragmentShader" type="x-shader/x-fragment">
+    uniform float amount;
+    uniform sampler2D tDiffuse;
+    varying vec2 vUv;
+  
+    float random( vec2 p )
+    {
+      vec2 K1 = vec2(
+        23.14069263277926, // e^pi (Gelfond's constant)
+        2.665144142690225 // 2^sqrt(2) (Gelfondâ€“Schneider constant)
+      );
+      return fract( cos( dot(p,K1) ) * 12345.6789 );
+    }
+  
+    void main() {
+  
+      vec4 color = texture2D( tDiffuse, vUv );
+      vec2 uvRandom = vUv;
+      uvRandom.y *= random(vec2(uvRandom.y,amount));
+      color.rgb += random(uvRandom)*0.15;
+      gl_FragColor = vec4( color  );
+    }
+  </script>  
+</body>
+</html>
+  
